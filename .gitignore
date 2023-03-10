@@ -4,7 +4,9 @@
 # Log file
 *.log
 
-build/
+/build/*
+!/build/distributions/
+
 gradle/
 .idea/
 .gradle/

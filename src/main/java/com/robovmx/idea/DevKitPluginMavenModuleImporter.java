@@ -44,21 +44,20 @@ public class DevKitPluginMavenModuleImporter extends MavenImporter {
                         @NotNull MavenProject mavenProject, @NotNull MavenProjectChanges changes,
                         @NotNull Map<MavenProject, String> mavenProjectToModuleName,
                         @NotNull List<MavenProjectsProcessorTask> postTasks) {
+        // hack the module type
+        module.setModuleType(PluginModuleType.ID);
+
         // update manifest location
         String manifestLocation = mavenProject.getProperties().getProperty("ij.pluginDescriptor");
         if (manifestLocation != null) {
-            manifestLocation = "META-INF/plugin.xml";
             PluginBuildConfiguration config = PluginBuildConfiguration.getInstance(module);
             if (config != null) {
                 VirtualFile basedir = mavenProject.getDirectoryFile();
                 VirtualFile pluginXml = basedir.findFileByRelativePath(manifestLocation);
                 if (pluginXml != null && pluginXml.exists()) {
-                    config.setManifestPath(pluginXml.getPath());
+                    config.setPluginXmlFromVirtualFile(pluginXml);
                 }
             }
         }
-
-        // hack the module type
-        module.setModuleType(PluginModuleType.ID);
     }
 }
